@@ -14,62 +14,96 @@
     pixel: "pixel.png"
   };
 
-  function applyCursor(settings) {
-    let styleElement = document.getElementById(STYLE_ID);
+  let currentSettings = { ...DEFAULTS };
+  let observer = null;
 
-    const filename = CURSORS[settings.selectedStyle];
+  function applyCursor() {
+    const filename = CURSORS[currentSettings.selectedStyle];
 
-    if (!settings.enabled || !filename) {
-      if (styleElement) {
-        styleElement.remove();
-      }
+    if (!currentSettings.enabled || !filename) {
+      const oldStyle = document.getElementById(STYLE_ID);
+      if (oldStyle) oldStyle.remove();
       return;
     }
 
-    const cursorUrl = chrome.runtime.getURL(
+    const root = document.documentElement;
+    if (!root) return;
+
+    let style = document.getElementById(STYLE_ID);
+
+    if (!style) {
+      style = document.createElement("style");
+      style.id = STYLE_ID;
+      root.appendChild(style);
+    }
+
+    const url = chrome.runtime.getURL(
       `cursors/${filename}`
     );
 
-    if (!styleElement) {
-      styleElement = document.createElement("style");
-      styleElement.id = STYLE_ID;
-
-      (document.head || document.documentElement)
-        .appendChild(styleElement);
-    }
-
-    styleElement.textContent = `
+    style.textContent = `
       html,
       html *,
       body,
       body * {
-        cursor: url("${cursorUrl}") 0 0, auto !important;
+        cursor: url("${url}") 0 0, auto !important;
       }
     `;
   }
 
   function loadSettings() {
-    chrome.storage.local.get(DEFAULTS, settings => {
+    chrome.storage.local.get(DEFAULTS, data => {
       if (chrome.runtime.lastError) return;
 
-      applyCursor({
-        enabled: settings.enabled === true,
-        selectedStyle: CURSORS[settings.selectedStyle]
-          ? settings.selectedStyle
+      currentSettings = {
+        enabled: data.enabled === true,
+        selectedStyle: CURSORS[data.selectedStyle]
+          ? data.selectedStyle
           : DEFAULTS.selectedStyle
-      });
+      };
+
+      applyCursor();
+    });
+  }
+
+  function observeDocument() {
+    if (!document.documentElement || observer) return;
+
+    observer = new MutationObserver(() => {
+      if (currentSettings.enabled) applyCursor();
+    });
+
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true
+    });
+
+    applyCursor();
+  }
+
+  if (document.documentElement) {
+    observeDocument();
+  } else {
+    const waitForRoot = new MutationObserver(() => {
+      if (document.documentElement) {
+        waitForRoot.disconnect();
+        observeDocument();
+      }
+    });
+
+    waitForRoot.observe(document, {
+      childList: true,
+      subtree: true
     });
   }
 
   loadSettings();
 
-  chrome.storage.onChanged.addListener(
-    (changes, areaName) => {
-      if (areaName !== "local") return;
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== "local") return;
 
-      if (changes.enabled || changes.selectedStyle) {
-        loadSettings();
-      }
+    if (changes.enabled || changes.selectedStyle) {
+      loadSettings();
     }
-  );
+  });
 })();
