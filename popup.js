@@ -14,7 +14,6 @@ const STYLE_NAMES = {
 const cards = document.querySelectorAll(".cursor-card");
 const toggleButton = document.getElementById("toggleButton");
 const restoreButton = document.getElementById("restoreButton");
-
 const statusText = document.getElementById("statusText");
 const selectedText = document.getElementById("selectedText");
 const message = document.getElementById("message");
@@ -31,7 +30,6 @@ function render() {
     : "DESATIVADO";
 
   toggleButton.classList.toggle("active", settings.enabled);
-
   toggleButton.setAttribute(
     "aria-pressed",
     String(settings.enabled)
@@ -45,29 +43,25 @@ function render() {
       card.dataset.style === settings.selectedStyle;
 
     card.classList.toggle("selected", selected);
-
-    card.setAttribute(
-      "aria-pressed",
-      String(selected)
-    );
+    card.setAttribute("aria-pressed", String(selected));
   });
 }
 
-function saveSettings(newSettings, successMessage) {
-  const nextSettings = {
-    enabled: Boolean(newSettings.enabled),
-    selectedStyle: STYLE_NAMES[newSettings.selectedStyle]
-      ? newSettings.selectedStyle
+function saveSettings(next, successMessage) {
+  const safeSettings = {
+    enabled: Boolean(next.enabled),
+    selectedStyle: STYLE_NAMES[next.selectedStyle]
+      ? next.selectedStyle
       : DEFAULTS.selectedStyle
   };
 
-  chrome.storage.local.set(nextSettings, () => {
+  chrome.storage.local.set(safeSettings, () => {
     if (chrome.runtime.lastError) {
       showMessage("Erro ao salvar configurações.");
       return;
     }
 
-    settings = nextSettings;
+    settings = safeSettings;
     render();
     showMessage(successMessage);
   });
@@ -98,33 +92,26 @@ cards.forEach(card => {
     if (!STYLE_NAMES[style]) return;
 
     saveSettings(
-      {
-        enabled: true,
-        selectedStyle: style
-      },
+      { enabled: true, selectedStyle: style },
       `${STYLE_NAMES[style]} selecionado!`
     );
   });
 });
 
 toggleButton.addEventListener("click", () => {
+  const enabled = !settings.enabled;
+
   saveSettings(
-    {
-      ...settings,
-      enabled: !settings.enabled
-    },
-    settings.enabled
-      ? "Personalização desativada."
-      : "Personalização ativada."
+    { ...settings, enabled },
+    enabled
+      ? "Personalização ativada."
+      : "Personalização desativada."
   );
 });
 
 restoreButton.addEventListener("click", () => {
   saveSettings(
-    {
-      enabled: false,
-      selectedStyle: "matrix"
-    },
+    { enabled: false, selectedStyle: "matrix" },
     "Cursor padrão restaurado."
   );
 });
