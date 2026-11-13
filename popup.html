@@ -8,19 +8,16 @@
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-
   <main class="app">
-
     <header class="header">
       <div class="brand">
         <div class="brand-icon">✦</div>
         <div>
           <h1>CUSTOM CURSOR</h1>
-          <p>CYBER INTERFACE v1.0</p>
+          <p>CYBER INTERFACE · V1.0</p>
         </div>
       </div>
-
-      <span class="version">1.0</span>
+      <span class="version">01</span>
     </header>
 
     <section class="status-panel">
@@ -28,9 +25,9 @@
         <span class="status-label">PERSONALIZAÇÃO</span>
         <strong id="statusText">Carregando...</strong>
       </div>
-
       <button id="toggleButton" class="toggle-button"
-        type="button" aria-pressed="false">
+        type="button" aria-label="Ativar ou desativar cursor"
+        aria-pressed="false">
         <span class="toggle-circle"></span>
       </button>
     </section>
@@ -42,7 +39,6 @@
       </div>
 
       <div class="cursor-grid">
-
         <button class="cursor-card" data-style="matrix" type="button">
           <div class="preview">
             <img src="cursors/matrix.png" alt="Cursor Matrix">
@@ -74,7 +70,6 @@
           <strong>PIXEL</strong>
           <span>RETRO STYLE</span>
         </button>
-
       </div>
     </section>
 
@@ -89,11 +84,10 @@
 
     <footer>
       <span>CUSTOM CURSOR</span>
-      <span>POWERED BY CHROMIUM</span>
+      <span>CHROMIUM EXTENSION</span>
     </footer>
 
     <p id="message" class="message" role="status"></p>
-
   </main>
 
   <script src="popup.js"></script>
