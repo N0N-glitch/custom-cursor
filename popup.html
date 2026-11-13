@@ -1,12 +1,101 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Cursor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Cursor</title>
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <h1>Custom Cursor</h1>
-    <p>Welcome to Custom Cursor!</p>
+
+  <main class="app">
+
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon">✦</div>
+        <div>
+          <h1>CUSTOM CURSOR</h1>
+          <p>CYBER INTERFACE v1.0</p>
+        </div>
+      </div>
+
+      <span class="version">1.0</span>
+    </header>
+
+    <section class="status-panel">
+      <div>
+        <span class="status-label">PERSONALIZAÇÃO</span>
+        <strong id="statusText">Carregando...</strong>
+      </div>
+
+      <button id="toggleButton" class="toggle-button"
+        type="button" aria-pressed="false">
+        <span class="toggle-circle"></span>
+      </button>
+    </section>
+
+    <section class="gallery-section">
+      <div class="section-heading">
+        <h2>CURSOR GALLERY</h2>
+        <span>04 STYLES</span>
+      </div>
+
+      <div class="cursor-grid">
+
+        <button class="cursor-card" data-style="matrix" type="button">
+          <div class="preview">
+            <img src="cursors/matrix.png" alt="Cursor Matrix">
+          </div>
+          <strong>MATRIX</strong>
+          <span>GREEN NEON</span>
+        </button>
+
+        <button class="cursor-card" data-style="cyber" type="button">
+          <div class="preview">
+            <img src="cursors/cyber.png" alt="Cursor Cyber">
+          </div>
+          <strong>CYBER</strong>
+          <span>BLUE ENERGY</span>
+        </button>
+
+        <button class="cursor-card" data-style="neon" type="button">
+          <div class="preview">
+            <img src="cursors/neon.png" alt="Cursor Neon">
+          </div>
+          <strong>NEON</strong>
+          <span>CYAN GLOW</span>
+        </button>
+
+        <button class="cursor-card" data-style="pixel" type="button">
+          <div class="preview">
+            <img src="cursors/pixel.png" alt="Cursor Pixel">
+          </div>
+          <strong>PIXEL</strong>
+          <span>RETRO STYLE</span>
+        </button>
+
+      </div>
+    </section>
+
+    <section class="selected-panel">
+      <span class="status-label">CURSOR SELECIONADO</span>
+      <strong id="selectedText">MATRIX</strong>
+    </section>
+
+    <button id="restoreButton" class="restore-button" type="button">
+      ↺ RESTAURAR CURSOR PADRÃO
+    </button>
+
+    <footer>
+      <span>CUSTOM CURSOR</span>
+      <span>POWERED BY CHROMIUM</span>
+    </footer>
+
+    <p id="message" class="message" role="status"></p>
+
+  </main>
+
+  <script src="popup.js"></script>
 </body>
 </html>
