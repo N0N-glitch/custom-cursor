@@ -3,22 +3,25 @@
   "manifest_version": 3,
   "name": "Custom Cursor",
   "version": "1.0.0",
-  "description": "Customize your browser cursor with cyberpunk styles.",
+  "description": "Personalize seu cursor com estilos cyberpunk.",
   "permissions": [
     "storage"
   ],
   "action": {
+    "default_title": "Custom Cursor",
     "default_popup": "popup.html"
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "scripts/cursor.js"
-      ],
+      "matches": ["<all_urls>"],
+      "js": ["scripts/cursor.js"],
       "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["cursors/*.png"],
+      "matches": ["<all_urls>"]
     }
   ]
 }
