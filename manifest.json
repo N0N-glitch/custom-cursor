@@ -1,0 +1,6 @@
+{
+  "name": "Custom Cursor",
+  "description": "A customizable cursor extension for Chromium browsers.",
+  "version": "1.0.0",
+  "manifest_version": 3
+}
